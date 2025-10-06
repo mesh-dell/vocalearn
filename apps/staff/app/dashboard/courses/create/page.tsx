@@ -131,7 +131,7 @@ export default function CreateCoursePage() {
             <div>
               <label className="block font-medium">Content</label>
               <Editor
-                apiKey="apgrgax94tnee6jgkjkgmbyb9217mmk10sl9cr2p4txtpjca"
+                apiKey={process.env.NEXT_PUBLIC_API_KEY}
                 value={module.content}
                 onEditorChange={(content) => {
                   const newModules = [...modules];
