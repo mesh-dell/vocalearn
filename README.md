@@ -1,7 +1,3 @@
-Absolutely 👍 — here’s your final **root-level `README.md`**, complete with instructions for installing dependencies, configuring only the **Staff app’s TinyMCE API key**, and **running all apps at once** in a Turborepo setup.
-
-It’s production-ready and clear for any developer joining the project.
-
 ---
 
 # 🎓 VocaLearn Turborepo
