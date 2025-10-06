@@ -1,0 +1,17 @@
+{
+  "name": "vocalearn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "turbo dev"
+  },
+  "packageManager": "pnpm@10.18.0",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "turbo": "^2.5.8"
+  }
+}

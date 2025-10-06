@@ -1,0 +1,29 @@
+
+> student@0.1.0 dev /home/mesh/Documents/monorepos/vocalearn/apps/student
+> next dev --turbopack --port 3000
+
+ [33m[1m⚠[22m[39m Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /home/mesh/Documents/monorepos/vocalearn/pnpm-lock.yaml as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /home/mesh/Documents/monorepos/vocalearn/apps/student/pnpm-lock.yaml
+
+   [1m[38;2;173;127;168m▲ Next.js 15.5.3[39m[22m (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.106:3000
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 1421ms
+ [37m[1m○[22m[39m Compiling / ...
+ [32m[1m✓[22m[39m Compiled / in 5.4s
+ GET / [32m200[39m in 7028ms
+ GET / [32m200[39m in 548ms
+ [37m[1m○[22m[39m Compiling /favicon.ico ...
+ [32m[1m✓[22m[39m Compiled /favicon.ico in 2.8s
+ GET / [32m200[39m in 2166ms
+ GET /favicon.ico?favicon.0b3bf435.ico [32m200[39m in 4167ms
+ GET / [32m200[39m in 360ms
+ GET /favicon.ico?favicon.0b3bf435.ico [32m200[39m in 542ms
+ GET / [32m200[39m in 193ms
+ GET /favicon.ico?favicon.0b3bf435.ico [32m200[39m in 349ms
