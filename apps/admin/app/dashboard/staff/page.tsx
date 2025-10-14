@@ -3,53 +3,20 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Loader2, PlusCircle } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { StaffGet, StaffPost } from "@/Models/Staff";
-import { addStaffAPI, fetchStaffAPI } from "@/Services/AdminService";
-import { toast } from "react-toastify";
+import { Loader2, PlusCircle, ArrowLeft } from "lucide-react";
+import { StaffGet } from "@/Models/Staff";
+import { fetchStaffAPI } from "@/Services/AdminService";
 import { useRouter } from "next/navigation";
-
-const staffSchema = z.object({
-  firstName: z.string().min(2),
-  lastName: z.string().min(2),
-  email: z.string().email(),
-  department: z.string().min(2),
-  gender: z.enum(["Male", "Female"]),
-  phoneNumber: z.string().min(10),
-  birthYear: z.number().min(1950).max(new Date().getFullYear()),
-  admissionYear: z.number().min(2000).max(new Date().getFullYear()),
-});
-
-type StaffForm = z.infer<typeof staffSchema>;
 
 export default function AdminStaffPage() {
   const [staff, setStaff] = useState<StaffGet[]>([]);
   const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<StaffForm>({
-    resolver: zodResolver(staffSchema),
-  });
-
+  // ✅ Load staff once
   useEffect(() => {
     const load = async () => {
       try {
@@ -62,23 +29,14 @@ export default function AdminStaffPage() {
       }
     };
     load();
-  }, [staff]);
+  }, []);
 
-  const handleAddStaff = async (data: StaffForm) => {
-    try {
-      setCreating(true);
-      const newStaff = await addStaffAPI(data);
-      setStaff((prev) => [...prev, newStaff]);
-      reset();
-      toast.success("Staff added successfully!");
-      router.push("/dashboard/staff");
-    } catch (err) {
-      console.error("Error adding staff", err);
-      toast.error("Failed to add staff");
-    } finally {
-      setCreating(false);
-    }
-  };
+  // Pagination
+  const totalPages = Math.ceil(staff.length / pageSize);
+  const paginatedStaff = staff.slice((page - 1) * pageSize, page * pageSize);
+
+  const nextPage = () => setPage((p) => Math.min(p + 1, totalPages));
+  const prevPage = () => setPage((p) => Math.max(p - 1, 1));
 
   if (loading) {
     return (
@@ -90,105 +48,31 @@ export default function AdminStaffPage() {
 
   return (
     <div className="container mx-auto px-6 py-10">
+      {/* Header section */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">All Staff</h1>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push("/dashboard")}
+            className="flex items-center gap-1"
+          >
+            <ArrowLeft size={16} />
+            Back
+          </Button>
+          <h1 className="text-3xl font-bold">All Staff</h1>
+        </div>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="flex items-center gap-2 bg-orange-500 text-white hover:bg-orange-600">
-              <PlusCircle size={18} />
-              Add Staff
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle>Add New Staff Member</DialogTitle>
-            </DialogHeader>
-
-            <form
-              onSubmit={handleSubmit(handleAddStaff)}
-              className="space-y-4 mt-4"
-            >
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label>First Name</label>
-                  <Input {...register("firstName")} />
-                  {errors.firstName && (
-                    <p className="text-red-500 text-sm">
-                      {errors.firstName.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label>Last Name</label>
-                  <Input {...register("lastName")} />
-                  {errors.lastName && (
-                    <p className="text-red-500 text-sm">
-                      {errors.lastName.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label>Email</label>
-                <Input {...register("email")} />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label>Department</label>
-                  <Input {...register("department")} />
-                </div>
-                <div>
-                  <label>Gender</label>
-                  <select
-                    {...register("gender")}
-                    className="w-full border rounded p-2"
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label>Phone Number</label>
-                <Input {...register("phoneNumber")} />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label>Birth Year</label>
-                  <Input
-                    type="number"
-                    {...register("birthYear", { valueAsNumber: true })}
-                  />
-                </div>
-                <div>
-                  <label>Admission Year</label>
-                  <Input
-                    type="number"
-                    {...register("admissionYear", { valueAsNumber: true })}
-                  />
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={creating}
-                className="bg-orange-500 text-white w-full hover:bg-orange-600"
-              >
-                {creating ? "Saving..." : "Add Staff"}
-              </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <Button
+          onClick={() => router.push("/dashboard/staff/create")}
+          className="flex items-center gap-2 bg-orange-500 text-white hover:bg-orange-600"
+        >
+          <PlusCircle size={18} />
+          Add Staff
+        </Button>
       </div>
 
-      {/* Staff Table */}
+      {/* Staff list */}
       {staff.length === 0 ? (
         <p className="text-gray-600">No staff found.</p>
       ) : (
@@ -196,7 +80,7 @@ export default function AdminStaffPage() {
           <CardContent className="p-0">
             <ScrollArea className="h-[70vh]">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-100">
+                <thead className="bg-gray-100 sticky top-0">
                   <tr>
                     <th className="px-6 py-3 text-left text-sm font-semibold">
                       Name
@@ -219,7 +103,7 @@ export default function AdminStaffPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {staff.map((member) => (
+                  {paginatedStaff.map((member) => (
                     <tr key={member.staffId || member.email}>
                       <td className="px-6 py-3">
                         {member.firstName} {member.lastName}
@@ -235,6 +119,31 @@ export default function AdminStaffPage() {
               </table>
             </ScrollArea>
           </CardContent>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-between items-center p-4 border-t">
+            <Button
+              onClick={prevPage}
+              disabled={page === 1}
+              variant="outline"
+              className="text-sm"
+            >
+              Previous
+            </Button>
+
+            <span className="text-sm text-gray-600">
+              Page {page} of {totalPages}
+            </span>
+
+            <Button
+              onClick={nextPage}
+              disabled={page === totalPages}
+              variant="outline"
+              className="text-sm"
+            >
+              Next
+            </Button>
+          </div>
         </Card>
       )}
     </div>
