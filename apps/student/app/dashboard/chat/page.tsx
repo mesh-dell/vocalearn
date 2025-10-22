@@ -51,9 +51,7 @@ export default function ChatPage() {
                     <p className="text-gray-600">{staff.department}</p>
                   </div>
                   <Link
-                    href={`/dashboard/chat/${encodeURIComponent(
-                      staff.email
-                    )}`}
+                    href={`/dashboard/chat/${encodeURIComponent(staff.email)}`}
                   >
                     <Button className="bg-orange-500 px-6 text-white hover:bg-orange-600">
                       Chat
@@ -68,4 +66,3 @@ export default function ChatPage() {
     </div>
   );
 }
-
