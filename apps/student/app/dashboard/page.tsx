@@ -104,12 +104,15 @@ export default function DashboardPage() {
                       className="mt-2 h-2"
                     />
                   </div>
-
-                  <Link href={`/dashboard/course/${course.courseId}`}>
-                    <Button className="mt-4 w-full bg-orange-500 text-white hover:bg-orange-600">
-                      Continue Learning
-                    </Button>
-                  </Link>
+                  {course.progression == "100%" ? (
+                    <p className="text-white bg-orange-500 mt-4 p-1.5 rounded-md text-center">Course finished</p>
+                  ) : (
+                    <Link href={`/dashboard/course/${course.courseId}`}>
+                      <Button className="mt-4 w-full bg-orange-500 text-white hover:bg-orange-600">
+                        Continue Learning
+                      </Button>
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
             ))}

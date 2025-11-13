@@ -10,7 +10,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/Context/useAuth";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { ChatGetConversationAPI } from "@/Services/ChatService";
+import {
+  ChatGetConversationAPI,
+  ChatMarkAsReadAPI,
+} from "@/Services/ChatService";
 
 interface ChatMessage {
   id: number;
@@ -50,6 +53,14 @@ export default function ChatConversationPage() {
               }),
             })),
           );
+          // 🔹 Mark all instructor messages as read
+          const unreadInstructorMessages = response.data.filter(
+            (msg) => msg.sender === instructorEmail && msg.read === false,
+          );
+
+          await Promise.all(
+            unreadInstructorMessages.map((msg) => ChatMarkAsReadAPI(msg.id)),
+          );
         }
       } catch (err) {
         console.error("Error loading conversation:", err);
@@ -58,8 +69,6 @@ export default function ChatConversationPage() {
 
     fetchMessages();
   }, [user?.email, instructorEmail]);
-
-  
 
   // Setup STOMP client
   useEffect(() => {
