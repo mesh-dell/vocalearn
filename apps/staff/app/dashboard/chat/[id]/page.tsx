@@ -10,13 +10,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/Context/useAuth";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { ChatGetConversationAPI } from "@/Services/ChatService";
+import {
+  ChatGetConversationAPI,
+  ChatMarkAsReadAPI,
+} from "@/Services/ChatService";
 
 interface ChatMessage {
   id: number;
   sender: string;
   content: string;
   timestamp: string;
+  read?: boolean;
 }
 
 export default function ChatConversationPage() {
@@ -29,24 +33,34 @@ export default function ChatConversationPage() {
   // student email from URL
   const studentEmail = decodeURIComponent(params.id as string);
 
-  // Load existing conversation
+  // Load existing conversation and mark unread as read
   useEffect(() => {
     const fetchMessages = async () => {
       if (!user?.email || !studentEmail) return;
       try {
         const response = await ChatGetConversationAPI(user.email, studentEmail);
         if (response?.data) {
-          setMessages(
-            response.data.map((msg: any) => ({
-              id: msg.id,
-              sender: msg.sender,
-              content: msg.content,
-              timestamp: new Date(msg.createdAt).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
-            }))
+          const fetchedMessages = response.data.map((msg: any) => ({
+            id: msg.id,
+            sender: msg.sender,
+            content: msg.content,
+            read: msg.read,
+            timestamp: new Date(msg.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          }));
+
+          setMessages(fetchedMessages);
+
+          // ✅ Mark all messages from student as read
+          const unread = fetchedMessages.filter(
+            (msg) => msg.sender === studentEmail && !msg.read
           );
+
+          for (const msg of unread) {
+            await ChatMarkAsReadAPI(msg.id);
+          }
         }
       } catch (err) {
         console.error("Error loading conversation:", err);
@@ -56,7 +70,7 @@ export default function ChatConversationPage() {
     fetchMessages();
   }, [user?.email, studentEmail]);
 
-  // Setup STOMP client
+  // Setup STOMP WebSocket client
   useEffect(() => {
     if (!user?.email) return;
 
@@ -70,13 +84,19 @@ export default function ChatConversationPage() {
     client.onConnect = () => {
       console.log("Connected to WebSocket");
 
-      client.subscribe(`/user/${user.email}/private`, (message) => {
+      client.subscribe(`/user/${user.email}/private`, async (message) => {
         if (message.body) {
           const msg = JSON.parse(message.body);
+
+          // ✅ If instructor receives a new message, mark it as read immediately
+          if (msg.sender === studentEmail) {
+            await ChatMarkAsReadAPI(msg.id);
+          }
+
           setMessages((prev) => [
             ...prev,
             {
-              id: prev.length + 1,
+              id: msg.id,
               sender: msg.sender,
               content: msg.content,
               timestamp: new Date().toLocaleTimeString([], {
@@ -95,7 +115,7 @@ export default function ChatConversationPage() {
     return () => {
       client.deactivate();
     };
-  }, [user?.email]);
+  }, [user?.email, studentEmail]);
 
   // Send message
   const handleSendMessage = () => {
@@ -146,7 +166,7 @@ export default function ChatConversationPage() {
 
       {/* Chat Container */}
       <Card className="flex h-[600px] flex-col">
-        {/* Messages Area */}
+        {/* Messages */}
         <CardContent className="flex-1 overflow-y-auto p-6">
           <div className="space-y-4">
             {messages.map((msg) => (
@@ -179,7 +199,7 @@ export default function ChatConversationPage() {
           </div>
         </CardContent>
 
-        {/* Message Input */}
+        {/* Input */}
         <div className="border-t p-4">
           <div className="flex space-x-2">
             <Input
@@ -201,3 +221,4 @@ export default function ChatConversationPage() {
     </div>
   );
 }
+

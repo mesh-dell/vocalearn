@@ -17,3 +17,14 @@ export const ChatGetConversationAPI = async (
     handleError(error);
   }
 };
+
+export const ChatMarkAsReadAPI = async (id: number) => {
+  try {
+    const res = await axios.post(
+      `http://localhost:8080/chat/messages/read/${id}`,
+    );
+    return res;
+  } catch (error) {
+    handleError(error);
+  }
+};
