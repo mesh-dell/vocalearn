@@ -45,6 +45,12 @@ export function DashboardNav() {
             >
               Chat
             </Link>
+            <Link
+              href="/dashboard/group-chat"
+              className="font-medium text-gray-700 transition-colors hover:text-blue-600"
+            >
+              Group Chat
+            </Link>
           </nav>
 
           {/* Mobile Menu */}
@@ -74,6 +80,9 @@ export function DashboardNav() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/dashboard/group-chat">Group Chat</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

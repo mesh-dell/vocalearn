@@ -28,3 +28,7 @@ export const ChatMarkAsReadAPI = async (id: number) => {
     handleError(error);
   }
 };
+
+export const ChatGetGroupMessagesAPI = (groupId: string | number) => {
+  return axios.get(`http://localhost:8080/chat/messages/group/${groupId}`);
+};
