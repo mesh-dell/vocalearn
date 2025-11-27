@@ -86,18 +86,15 @@ export function DashboardNav() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {/* Profile Button (hidden on md and up, since nav shows it) */}
-            <Button className="bg-gray-700 px-4 text-white hover:bg-gray-800">
-              Profile
-            </Button>
           </div>
 
           {/* Profile Button (desktop only) */}
           <div className="hidden md:block">
-            <Button className="bg-gray-700 px-6 text-white hover:bg-gray-800">
-              <Link href={"/dashboard/profile"}>Profile</Link>
-            </Button>
+            <Link href={"/dashboard/profile"}>
+              <Button className="bg-gray-700 px-6 text-white hover:bg-gray-800">
+                Profile
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

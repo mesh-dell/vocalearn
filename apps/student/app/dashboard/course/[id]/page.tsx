@@ -12,6 +12,7 @@ import { fetchCourseModulesAPI } from "@/Services/CourseService";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { useAuth } from "@/Context/useAuth";
+import { awardPoints } from "@/Services/GamifyService";
 
 type ModuleType = {
   moduleId: number;
@@ -96,6 +97,7 @@ export default function CourseDetailPage() {
       if (res) {
         setCompletedModules((prev) => [...prev, moduleId]);
         toast.success("Module marked as complete!");
+        await awardPoints("COMPLETE_MODULE", user!.admissionId, user!.lastName);
       }
     } catch {
       toast.error("Failed to mark module complete.");

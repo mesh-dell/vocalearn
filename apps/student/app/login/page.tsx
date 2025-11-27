@@ -12,6 +12,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "@/Context/useAuth";
+import { awardPoints } from "@/Services/GamifyService";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -24,7 +25,7 @@ type LoginFormInputs = {
 };
 
 export default function LoginPage() {
-  const { loginUser } = useAuth();
+  const { loginUser, user } = useAuth();
   const {
     register,
     handleSubmit,

@@ -5,6 +5,8 @@ export type UserProfileToken = {
 
 export type UserProfile = {
   email: string;
+  firstName: string;
+  lastName: string;
   admissionId: string;
   admissionYear: number;
   gender: string;

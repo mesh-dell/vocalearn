@@ -13,6 +13,7 @@ import { useAuth } from "@/Context/useAuth";
 import { assignmentsSubmitAPI } from "@/Services/AssignmentService";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { awardPoints } from "@/Services/GamifyService";
 
 export default function AssignmentDetailPage() {
   const { id } = useParams();
@@ -74,6 +75,7 @@ export default function AssignmentDetailPage() {
       const data = await assignmentsSubmitAPI(submission);
       if (data) {
         toast.success("Assignment submitted successfully!");
+        await awardPoints("SUBMIT_ASSIGNMENT", user.admissionId, user.lastName);
         router.push("/dashboard/assignments");
       }
     } catch (error) {

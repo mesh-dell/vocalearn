@@ -2,9 +2,15 @@
 import { createContext, useEffect, useState } from "react";
 import { UserProfile } from "@/Models/User";
 import { useRouter } from "next/navigation";
-import { loginAPI, registerAPI, profileAPI } from "@/Services/AuthService";
+import {
+  loginAPI,
+  registerAPI,
+  profileAPI,
+  completeProfileAPI,
+} from "@/Services/AuthService";
 import { toast } from "react-toastify";
 import React from "react";
+import { awardPoints } from "@/Services/GamifyService";
 
 type UserContextType = {
   user: UserProfile | null;
@@ -20,6 +26,7 @@ type UserContextType = {
     confirmPassword: string,
   ) => void;
   logout: () => void;
+  completeUserProfile: (firstName: string, lastName: string) => void;
   isLoggedIn: () => boolean;
 };
 
@@ -64,7 +71,15 @@ export const UserProvider = ({ children }: Props) => {
     password: string,
     confirmPassword: string,
   ) => {
-    await registerAPI(email, admissionYear, admissionId, courseName, gender, password, confirmPassword)
+    await registerAPI(
+      email,
+      admissionYear,
+      admissionId,
+      courseName,
+      gender,
+      password,
+      confirmPassword,
+    )
       .then(async (res) => {
         if (res) {
           localStorage.setItem("token", res.data.token);
@@ -85,6 +100,12 @@ export const UserProvider = ({ children }: Props) => {
           setToken(res.data.token);
           await fetchProfile(res.data.token);
           toast.success("Login Success!");
+          ``;
+          if (!user) {
+            console.log("no user");
+            return;
+          }
+          awardPoints("LOGIN", user.admissionId, user.lastName);
           router.push("/dashboard");
         }
       })
@@ -101,9 +122,32 @@ export const UserProvider = ({ children }: Props) => {
     router.push("/");
   };
 
+  const completeUserProfile = async (firstName: string, lastName: string) => {
+    if (!token) {
+      toast.error("No token found. Please log in again.");
+      return;
+    }
+    try {
+      await completeProfileAPI(token, firstName, lastName);
+      await fetchProfile(token);
+      toast.success("Profile completed successfully!");
+      router.push("/dashboard/profile");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to complete profile");
+    }
+  };
   return (
     <UserContext.Provider
-      value={{ loginUser, user, token, logout, isLoggedIn, registerUser }}
+      value={{
+        loginUser,
+        user,
+        token,
+        logout,
+        isLoggedIn,
+        registerUser,
+        completeUserProfile,
+      }}
     >
       {isReady ? children : null}
     </UserContext.Provider>
@@ -111,4 +155,3 @@ export const UserProvider = ({ children }: Props) => {
 };
 
 export const useAuth = () => React.useContext(UserContext);
-

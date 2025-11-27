@@ -51,3 +51,25 @@ export const profileAPI = async (token: string) => {
     handleError(error);
   }
 };
+
+export const completeProfileAPI = async (
+  token: string,
+  firstName: string,
+  lastName: string,
+) => {
+  try {
+    const res = await axios.post<UserProfile>(
+      api + "complete/profile",
+      {
+        firstName,
+        lastName,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
