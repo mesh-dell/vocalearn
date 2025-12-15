@@ -8,6 +8,7 @@ export const GamifyActions = {
   COMPLETE_MODULE: 30,
   SUBMIT_ASSIGNMENT: 20,
   PERFECT_SCORE: 50,
+  ACTIVE_ONE_HOUR: 12,
 } as const;
 
 type GamifyActionKey = keyof typeof GamifyActions;
