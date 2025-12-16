@@ -100,12 +100,11 @@ export const UserProvider = ({ children }: Props) => {
           setToken(res.data.token);
           await fetchProfile(res.data.token);
           toast.success("Login Success!");
-          ``;
           if (!user) {
             console.log("no user");
             return;
           }
-          awardPoints("LOGIN", user.admissionId, user.lastName);
+          await awardPoints("LOGIN", user.admissionId, user.lastName)
           router.push("/dashboard");
         }
       })

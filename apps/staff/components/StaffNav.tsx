@@ -9,8 +9,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/Context/useAuth";
 
 export function StaffNav() {
+  const {logout} = useAuth()
   return (
     <header className="border-b bg-white">
       <div className="container mx-auto px-6 py-4">
@@ -39,7 +41,7 @@ export function StaffNav() {
             <Link href="/dashboard/chat" className="hover:text-blue-600">
               Chat
             </Link>
-            
+           <Button onClick={logout}>Log Out</Button> 
           </nav>
 
           {/* Mobile Nav */}

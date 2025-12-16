@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/Context/useAuth";
 
 export default function AdminDashboardPage() {
-  const { user, token } = useAuth(); // assuming your useAuth gives { user, token }
+  const { user, token, logout } = useAuth(); // assuming your useAuth gives { user, token }
   const router = useRouter();
 
   useEffect(() => {
@@ -42,6 +42,7 @@ export default function AdminDashboardPage() {
         <p className="text-gray-600 mt-1">
           Manage staff, classes, and system settings for your LMS.
         </p>
+        <Button className="mt-4" onClick={logout}>Logout</Button>
       </div>
 
       {/* Dashboard Cards */}

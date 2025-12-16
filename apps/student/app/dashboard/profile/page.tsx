@@ -5,9 +5,10 @@ import { useAuth } from "@/Context/useAuth";
 import { getActiveWeek } from "@/Services/GamifyService";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
-  const { user, token } = useAuth();
+  const { user, token, logout } = useAuth();
   const [weeklyData, setWeeklyData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -41,6 +42,7 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-8 pb-20">
+      <Button className="cursor-pointer bg-blue-500" onClick={logout}>Logout</Button>
 
       {/* Incomplete Profile Warning */}
       {incomplete && (
