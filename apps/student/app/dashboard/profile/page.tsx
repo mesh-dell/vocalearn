@@ -9,25 +9,25 @@ import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
   const { user, token, logout } = useAuth();
-  const [weeklyData, setWeeklyData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  // const [weeklyData, setWeeklyData] = useState<any>(null);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!token) return;
+  // useEffect(() => {
+  //   if (!token) return;
 
-    const fetchWeeklyData = async () => {
-      try {
-        const res = await getActiveWeek(token);
-        setWeeklyData(res);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //   const fetchWeeklyData = async () => {
+  //     try {
+  //       const res = await getActiveWeek(token);
+  //       setWeeklyData(res);
+  //     } catch (err) {
+  //       console.error(err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchWeeklyData();
-  }, [token]);
+  //   fetchWeeklyData();
+  // }, [token]);
 
   if (!user) {
     return (
@@ -120,8 +120,9 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Weekly Gamify Data */}
-      <Card className="border border-blue-200 bg-blue-50">
+      {/* Weekly Gamify Data 
+      
+     <Card className="border border-blue-200 bg-blue-50">
         <CardContent className="space-y-4 p-6">
           <h2 className="text-xl font-semibold text-blue-800">
             Weekly Gamify Progress
@@ -154,7 +155,8 @@ export default function ProfilePage() {
             <p className="text-gray-500">No weekly gamify data found.</p>
           )}
         </CardContent>
-      </Card>
+      </Card> 
+      */}
     </div>
   );
 }
