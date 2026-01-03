@@ -48,40 +48,9 @@ export default function AssignmentsPage() {
       </header>
 
       {/* Stats */}
-      <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <Card>
-          <CardContent className="p-6 text-center">
-            <h3 className="mb-2 text-lg font-semibold text-gray-700">
-              Total Assignments
-            </h3>
-            <p className="text-3xl font-bold text-gray-900">
-              {assignments.length}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6 text-center">
-            <h3 className="mb-2 text-lg font-semibold text-gray-700">
-              Completed
-            </h3>
-            <p className="text-3xl font-bold text-green-600">{completed}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6 text-center">
-            <h3 className="mb-2 text-lg font-semibold text-gray-700">
-              In Progress
-            </h3>
-            <p className="text-3xl font-bold text-orange-600">{inProgress}</p>
-          </CardContent>
-        </Card>
-      </section>
-
       {/* Assignments List */}
       <section>
-        <h2 className="mb-6 text-2xl font-bold text-gray-900">
+        <h2 className="mb-2 text-2xl font-bold text-gray-900">
           All Assignments
         </h2>
 

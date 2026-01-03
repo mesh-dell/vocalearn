@@ -76,7 +76,7 @@ export default function DashboardPage() {
 
       {/* Enrolled Courses */}
       <div>
-        <h2 className="mb-6 text-2xl font-bold text-gray-900">
+        <h2 className="mb-2 text-2xl font-bold text-gray-900">
           Enrolled Courses
         </h2>
 
@@ -122,7 +122,7 @@ export default function DashboardPage() {
 
       {/* All Available Courses */}
       <div>
-        <h2 className="mb-6 text-2xl font-bold text-gray-900">
+        <h2 className="mb-2 text-2xl font-bold text-gray-900">
           All Available Courses
         </h2>
 
